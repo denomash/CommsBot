@@ -63,6 +63,7 @@ const sendDirectMessageTobot = (responseText) => {
 };
 
 router.post('/events', (req, res) => {
+  res.status(200).end(); // best practice to respond with empty 200 status code
   const payload = req.body;
   console.log(payload);
   const message = {
@@ -119,6 +120,7 @@ router.post('/command/report', (req, res) => {
 
 router.post('/actions', (req, res) => {
   try {
+    res.status(200).end(); // best practice to respond with empty 200 status code
     const actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
     const { callback_id, trigger_id } = actionJSONPayload;
     let message;
