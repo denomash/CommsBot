@@ -59,10 +59,7 @@ const sendDirectMessageTobot = (responseText) => {
   };
 
   return axios.post('https://slack.com/api/chat.postMessage', querystring.stringify(options))
-    .then((res) => 
-      // console.log(querystring.stringify(options));
-       res.data
-    ).catch(error => console.log(error));
+    .then(res => res.data).catch(error => console.log(error));
 };
 
 router.post('/events', (req, res) => {
