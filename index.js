@@ -2,7 +2,7 @@ import http from 'http';
 import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
-import eventRoute from './routes/routes';
+import eventRoute from './src/routes/routes';
 
 const app = express();
 
