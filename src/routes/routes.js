@@ -3,6 +3,7 @@ import express from 'express';
 import axios from 'axios';
 import request from 'request';
 import querystring from 'querystring';
+import qs from 'qs';
 
 const router = new express.Router();
 
@@ -60,8 +61,8 @@ const sendDirectMessageTobot = (responseText) => {
   return axios.post('https://slack.com/api/chat.postMessage', querystring.stringify(options))
     .then((res) => {
       // console.log(querystring.stringify(options));
-      res.status(200).end();
-    });
+      return res.data;
+    }).catch(error => console.log(error));
 };
 
 router.post('/events', (req, res) => {
@@ -129,7 +130,7 @@ router.post('/command/report', (req, res) => {
 router.post('/actions', (req, res) => {
   try {
     const actionJSONPayload = JSON.parse(req.body.payload); // parse URL-encoded payload JSON string
-    const { callback_id } = actionJSONPayload;
+    const { callback_id, trigger_id } = actionJSONPayload;
     let message;
     switch (callback_id) {
     case 'progress':
@@ -137,33 +138,36 @@ router.post('/actions', (req, res) => {
       console.log(actionJSONPayload);
       if (actionJSONPayload.actions[0].name === 'Productive') {
         message = {
-          text: 'That\'s great :clap:',
-          attachments: [
-            {
-              text: 'Is your progress demoable',
-              replace_original: false,
-              fallback: "Shame... buttons aren't supported in this land",
-              callback_id: 'feedback',
-              color: '#3AA3E3',
-              attachment_type: 'default',
-              actions: [
-                {
-                  name: 'Yes',
-                  text: 'Yes',
-                  type: 'button',
-                  value: 'yes',
-                },
-                {
-                  name: 'No',
-                  text: 'No',
-                  type: 'button',
-                  value: 'no',
-                },
-              ],
-            },
-          ],
+          token: 'xoxp-558972477111-559335643958-558735730897-be87523051880b342b3f47017d012a40',
+          trigger_id,
+          dialog: JSON.stringify({
+            callback_id: 'dev',
+            title: 'Request a Ride',
+            submit_label: 'Request',
+            notify_on_cancel: true,
+            state: 'Limo',
+            elements: [
+              {
+                type: 'text',
+                label: 'Pickup Location',
+                name: 'loc_origin',
+              },
+              {
+                type: 'text',
+                label: 'Dropoff Location',
+                name: 'loc_destination',
+              },
+            ],
+
+          }),
         };
-        sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
+        return axios.post('https://slack.com/api/dialog.open', qs.stringify(message))
+          .then((resp) => {
+            console.log(resp.data);
+            return resp.data;
+          })
+          .catch(err => console.log(err));
+        // sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
       } if (actionJSONPayload.actions[0].name === 'Unproductive') {
         message = {
           text: 'That\'s okay.',
@@ -262,8 +266,16 @@ router.post('/actions', (req, res) => {
         };
         sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
       }
-
       break;
+    case 'dev':
+      console.log(actionJSONPayload);
+      return res.status(200);
+    //   //   message = {
+    //   //     text: 'Cool',
+    //   //   };
+    //   //   sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
+    //   sendDirectMessageTobot("hello");
+    //   break;
 
     case 'feedback2':
       res.status(200).end();
