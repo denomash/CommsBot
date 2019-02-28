@@ -59,10 +59,10 @@ const sendDirectMessageTobot = (responseText) => {
   };
 
   return axios.post('https://slack.com/api/chat.postMessage', querystring.stringify(options))
-    .then((res) => {
+    .then((res) => 
       // console.log(querystring.stringify(options));
-      return res.data;
-    }).catch(error => console.log(error));
+       res.data
+    ).catch(error => console.log(error));
 };
 
 router.post('/events', (req, res) => {
@@ -134,33 +134,43 @@ router.post('/actions', (req, res) => {
     let message;
     switch (callback_id) {
     case 'progress':
-      res.status(200).end(); // best practice to respond with 200 status
-      console.log(actionJSONPayload);
       if (actionJSONPayload.actions[0].name === 'Productive') {
         message = {
-          token: 'xoxp-558972477111-559335643958-558735730897-be87523051880b342b3f47017d012a40',
+          token: 'xoxp-558972477111-559335643958-563230522804-501231171716f70789dd06b0f433629d',
           trigger_id,
           dialog: JSON.stringify({
             callback_id: 'dev',
-            title: 'Request a Ride',
-            submit_label: 'Request',
+            title: 'Communication update',
+            submit_label: 'Submit',
             notify_on_cancel: true,
             state: 'Limo',
             elements: [
               {
                 type: 'text',
-                label: 'Pickup Location',
-                name: 'loc_origin',
+                label: 'What\'s your progress in the past 24hrs?',
+                name: 'stanup',
               },
               {
                 type: 'text',
-                label: 'Dropoff Location',
-                name: 'loc_destination',
+                label: 'Have you updated relevant stakeholders? (Yes/No)',
+                name: 'comms',
+              },
+              {
+                type: 'text',
+                label: 'Any Blockers',
+                name: 'blockers',
+              },
+              {
+                label: 'Additional information',
+                name: 'comment',
+                type: 'textarea',
+                hint: 'Provide additional information if needed.',
               },
             ],
 
           }),
         };
+
         return axios.post('https://slack.com/api/dialog.open', qs.stringify(message))
           .then((resp) => {
             console.log(resp.data);
@@ -268,14 +278,12 @@ router.post('/actions', (req, res) => {
       }
       break;
     case 'dev':
-      console.log(actionJSONPayload);
-      return res.status(200);
-    //   //   message = {
-    //   //     text: 'Cool',
-    //   //   };
-    //   //   sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
-    //   sendDirectMessageTobot("hello");
-    //   break;
+      res.status(200).send();
+      message = {
+        text: 'Cool :simple_smile:. Keep the comms up and running champ, communication is key. \n Rock and roll ',
+      };
+      sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
+      break;
 
     case 'feedback2':
       res.status(200).end();
