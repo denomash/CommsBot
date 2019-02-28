@@ -25,7 +25,7 @@ function sendMessageToSlackResponseURL(responseURL, JSONmessage) {
 
 const sendDirectMessageTobot = (responseText) => {
   const options = {
-    token: 'xoxb-558972477111-560379059399-iFAN3xmLH6Lc7KzMLnXi3RKo',
+    token: 'xoxb-558972477111-560379059399-DEPArE6aNDRayQGEB3NYPKEe',
     channel: 'DGFJNCVAR',
     text: responseText,
     attachments: [
@@ -128,7 +128,7 @@ router.post('/actions', (req, res) => {
     case 'progress':
       if (actionJSONPayload.actions[0].name === 'Productive') {
         message = {
-          token: 'xoxp-558972477111-559335643958-563230522804-501231171716f70789dd06b0f433629d',
+          token: 'xoxp-558972477111-559335643958-563427889764-1edf8174e886bf6262c5da63b266a567',
           trigger_id,
           dialog: JSON.stringify({
             callback_id: 'dev',
