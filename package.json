@@ -1,0 +1,37 @@
+{
+  "name": "comms-bot",
+  "version": "1.0.0",
+  "description": "A communication bot",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node -- src/index.js",
+    "build": "rm -rf ./dist/ && babel src --out-dir dist/ --copy-files",
+    "lint": "eslint src"
+  },
+  "author": "Dennis Macharia",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/client": "^4.10.0",
+    "@slack/events-api": "^2.2.0",
+    "@slack/interactive-messages": "^1.1.0",
+    "axios": "^0.18.0",
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.18.3",
+    "config": "^3.0.1",
+    "csv-write-stream": "^2.0.0",
+    "eslint": "^5.14.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "express": "^4.16.4",
+    "mkdirp": "^0.5.1",
+    "morgan": "^1.9.1",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0",
+    "tracer": "^0.9.8"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
