@@ -95,7 +95,7 @@ router.post('/command/report', (req, res) => {
     text: 'Hello :smiley:',
     attachments: [
       {
-        text: 'What\'s your progress in the past 24hrs?',
+        text: 'Have any of these occurred in the last hour?',
         fallback: "Shame... buttons aren't supported in this land",
         callback_id: 'progress',
         color: '#3AA3E3',
@@ -103,22 +103,15 @@ router.post('/command/report', (req, res) => {
         actions: [
           {
             name: 'Productive',
-            text: 'Productive',
+            text: 'Standup',
             type: 'button',
             value: 'yes',
           },
           {
             name: 'Unproductive',
-            text: 'Unproductive',
+            text: 'Pull Request Submitted',
             type: 'button',
             value: 'no',
-            style: 'danger',
-          },
-          {
-            name: 'On vacation',
-            text: 'On vacation',
-            type: 'button',
-            value: 'maybe',
           },
         ],
       },
@@ -147,24 +140,18 @@ router.post('/actions', (req, res) => {
             elements: [
               {
                 type: 'text',
-                label: 'What\'s your progress in the past 24hrs?',
+                label: 'What was your progress in the past 24hrs?',
                 name: 'stanup',
               },
               {
                 type: 'text',
-                label: 'Have you updated relevant stakeholders? (Yes/No)',
+                label: 'What are you working on now?',
                 name: 'comms',
               },
               {
                 type: 'text',
                 label: 'Any Blockers',
                 name: 'blockers',
-              },
-              {
-                label: 'Additional information',
-                name: 'comment',
-                type: 'textarea',
-                hint: 'Provide additional information if needed.',
               },
             ],
 
@@ -280,7 +267,7 @@ router.post('/actions', (req, res) => {
     case 'dev':
       res.status(200).send();
       message = {
-        text: 'Cool :simple_smile:. Keep the comms up and running champ, communication is key. \n Rock and roll ',
+        text: 'Great! sending your standup to @Alan for review \n @Alan approved your message. Message sent to @Ben',
       };
       sendMessageToSlackResponseURL(actionJSONPayload.response_url, message);
       break;
